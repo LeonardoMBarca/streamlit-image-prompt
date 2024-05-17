@@ -17,7 +17,7 @@ def main():
     st.title(f""":rainbow[Interface de Extração de Informações de Imagem Utilizando o Bedrock]""")
 
     st.header('Envie uma ou mais imagens:')
-    files = st.file_uploader('Envie as imagens', type=["PNG", "PDF"], accept_multiple_files=True, key="new")
+    files = st.file_uploader('Envie as imagens', type=["PNG", "PDF", "JPEG", "JPG"], accept_multiple_files=True, key="new")
     
     prompt = st.text_input("Digite o prompt:")
     
@@ -25,12 +25,10 @@ def main():
         if st.button("Obter Resposta"):
             for file in files:
                 process_id = str(uuid())
-                print(f'file {file}')
                 filename = file.name
                 file_type = file.type
-                print(f'file_type: {file_type}')
+                print(file_type)
                 name = filename.rpartition('.')[0]
-                print(f'name: {name}')
                 signed_url = get_signed_url(process_id, filename, file_type, name)
                 upload_file(signed_url[name], file, file_type)
                 key = signed_url[name]["key"]
@@ -81,13 +79,13 @@ def interval_get_process(process_id):
         print(process_id)
         if response.status_code != 200:
             print("Erro na requisição")
-            sleep(5)
+            sleep(2)
         else:
             print("Requisição bem-sucedida")
             data = response.json()
             if "error" in data:
                 print("Erro no processamento")
-                sleep(5)
+                sleep(2)
             else:
                 print("Processamento concluído com sucesso")
                 print(data["textractPayload"])
