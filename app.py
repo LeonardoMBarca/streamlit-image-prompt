@@ -25,9 +25,12 @@ def main():
         if st.button("Obter Resposta"):
             for file in files:
                 process_id = str(uuid())
+                print(f'file {file}')
                 filename = file.name
-                name = filename.split(".pdf")[0]
                 file_type = file.type
+                print(f'file_type: {file_type}')
+                name = filename.rpartition('.')[0]
+                print(f'name: {name}')
                 signed_url = get_signed_url(process_id, filename, file_type, name)
                 upload_file(signed_url[name], file, file_type)
                 key = signed_url[name]["key"]
